@@ -1,16 +1,8 @@
 import type { ReactNode } from 'react';
 
-const supportedFormats = ['TXT', 'FB2', 'EPUB', 'ZIP'];
-const voices = [
-  'en-US-AriaNeural',
-  'en-US-GuyNeural',
-  'en-GB-LibbyNeural'
-];
-const settings = [
-  { label: 'Chunk size', value: '1,200 chars' },
-  { label: 'Speed', value: 'Normal' },
-  { label: 'Dictionary mode', value: 'On' }
-];
+import { InputSurface } from './components/InputSurface';
+import { VoiceSettings } from './components/VoiceSettings';
+import { useWorkflowState } from './workflow/useWorkflowState';
 
 function SectionCard({
   eyebrow,
@@ -38,6 +30,8 @@ function SectionCard({
 }
 
 export default function App() {
+  const workflow = useWorkflowState();
+
   return (
     <main className="app-shell">
       <div className="backdrop" aria-hidden="true" />
@@ -50,8 +44,8 @@ export default function App() {
             voice selection, and conversion settings.
           </p>
         </div>
-        <div className="hero-status" role="status" aria-live="polite">
-          Shell mounted. Waiting for an upload, a voice, and conversion settings.
+        <div className={`hero-status ${workflow.canStart ? 'ready' : 'blocked'}`} role="status" aria-live="polite">
+          {workflow.readinessSummary}
         </div>
       </header>
 
@@ -61,20 +55,12 @@ export default function App() {
           title="Upload"
           description="Supported inputs are surfaced before conversion begins."
         >
-          <div className="upload-surface" aria-label="Upload surface">
-            <div className="upload-cta">
-              <span className="upload-title">Drop files here</span>
-              <span className="upload-copy">or browse for a source file.</span>
-            </div>
-            <div className="format-list" aria-label="Supported formats">
-              {supportedFormats.map((format) => (
-                <span key={format} className="format-pill">
-                  {format}
-                </span>
-              ))}
-            </div>
-            <p className="hint">Accepted source types: TXT, FB2, EPUB, and ZIP.</p>
-          </div>
+          <InputSurface
+            accept={workflow.accept}
+            fileError={workflow.fileError}
+            onFileSelection={workflow.handleFileSelection}
+            selectedFile={workflow.selectedFile}
+          />
         </SectionCard>
 
         <SectionCard
@@ -82,14 +68,18 @@ export default function App() {
           title="Voice"
           description="Choose a target voice before the start action becomes meaningful."
         >
-          <div className="voice-list" role="list" aria-label="Available voices">
-            {voices.map((voice, index) => (
-              <article key={voice} className={`voice-card${index === 0 ? ' selected' : ''}`} role="listitem">
-                <p className="voice-name">{voice}</p>
-                <p className="voice-meta">{index === 0 ? 'Default selection' : 'Available option'}</p>
-              </article>
-            ))}
-          </div>
+          <VoiceSettings
+            chunkSizeText={workflow.chunkSizeText}
+            dictionaryMode={workflow.dictionaryMode}
+            onChunkSizeChange={workflow.handleChunkSizeChange}
+            onDictionaryModeChange={workflow.handleDictionaryModeChange}
+            onSpeedChange={workflow.handleSpeedChange}
+            onVoiceChange={workflow.handleVoiceChange}
+            selectedVoice={workflow.selectedVoice}
+            settingsError={workflow.settingsError}
+            speed={workflow.speed}
+            supportedVoices={workflow.supportedVoices}
+          />
         </SectionCard>
 
         <SectionCard
@@ -99,12 +89,18 @@ export default function App() {
           className="settings-panel"
         >
           <div className="settings-grid">
-            {settings.map((setting) => (
-              <div key={setting.label} className="setting-row">
-                <span className="setting-label">{setting.label}</span>
-                <strong className="setting-value">{setting.value}</strong>
-              </div>
-            ))}
+            <div className="setting-row">
+              <span className="setting-label">File readiness</span>
+              <strong className="setting-value">{workflow.statusSummary}</strong>
+            </div>
+            <div className="setting-row">
+              <span className="setting-label">Voice readiness</span>
+              <strong className="setting-value">{workflow.voiceSummary}</strong>
+            </div>
+            <div className="setting-row">
+              <span className="setting-label">Control readiness</span>
+              <strong className="setting-value">{workflow.settingsSummary}</strong>
+            </div>
           </div>
         </SectionCard>
 
@@ -115,12 +111,17 @@ export default function App() {
           className="status-panel"
         >
           <div className="status-stack">
-            <div className="status-line ready">Ready to configure conversion.</div>
+            <div className={`status-line ${workflow.canStart ? 'ready' : 'blocked'}`}>
+              {workflow.canStart ? 'Ready to start conversion.' : 'Start conversion is blocked.'}
+            </div>
             <ul className="status-notes">
-              <li>No file selected.</li>
-              <li>No voice locked in yet.</li>
-              <li>No conversion changes applied.</li>
+              <li>{workflow.statusSummary}</li>
+              <li>{workflow.voiceSummary}</li>
+              <li>{workflow.settingsSummary}</li>
             </ul>
+            <button type="button" className="start-button" disabled={!workflow.canStart}>
+              Start conversion
+            </button>
           </div>
         </SectionCard>
       </div>
