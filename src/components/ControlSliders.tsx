@@ -91,7 +91,7 @@ export const ControlSliders: React.FC<ControlSlidersProps> = ({
           </label>
           <CustomNumberInput
             value={chunkSize}
-            min={400} max={12000} step={100}
+            min={400} max={8000} step={100}
             onChange={(val) => onChunkSizeChange(val.toString())}
             ariaLabel="Number of characters per synthesis request"
           />

@@ -5,7 +5,7 @@ const WIN_EPOCH = 11644473600;
 const S_TO_NS = 1e9;
 const KEEP_ALIVE_INTERVAL = 30000;
 const CONNECTION_TIMEOUT = 10000;
-const REQUEST_TIMEOUT = 120000;
+const REQUEST_TIMEOUT = 180000;
 
 export type EdgeTtsConnectionState = 'DISCONNECTED' | 'CONNECTING' | 'READY' | 'BUSY';
 
@@ -167,7 +167,6 @@ export class EdgeTtsService {
     }
 
     if (data instanceof Blob) {
-      console.log(`[EdgeTtsService] Received audio chunk: ${data.size} bytes`);
       this.audioChunks.push(data);
     }
   }

@@ -5,7 +5,7 @@ import { voices } from './voices';
 const supportedFileExtensions = ['txt', 'fb2', 'epub', 'zip'] as const;
 const defaultChunkSize = '4000';
 const minChunkSize = 400;
-const maxChunkSize = 12000;
+const maxChunkSize = 8000;
 
 export type SelectedFileSummary = {
   name: string;

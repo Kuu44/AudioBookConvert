@@ -9,7 +9,7 @@ import { VoiceSelector } from './components/VoiceSelector';
 import { ControlSliders } from './components/ControlSliders';
 import { ProcessingSettings } from './components/ProcessingSettings';
 import { ConversionBar } from './components/ConversionBar';
-import { OutputPanel } from './components/OutputPanel';
+import { ErrorScreen } from './components/ErrorScreen';
 import { ConversionDashboard } from './components/ConversionDashboard';
 import { SuccessScreen } from './components/SuccessScreen';
 
@@ -75,7 +75,9 @@ export function App() {
       <div className="app-container">
         <Header status={appStatus} />
 
-        {conversionPhase === 'succeeded' ? (
+        {conversionPhase === 'failed' ? (
+          <ErrorScreen error={conversionError} onReset={resetWorkflow} />
+        ) : conversionPhase === 'succeeded' ? (
           <SuccessScreen artifact={conversionArtifact} onReset={resetWorkflow} />
         ) : isConversionRunning ? (
           <ConversionDashboard 
@@ -151,9 +153,6 @@ export function App() {
                 </div>
               </div>
             </div>
-
-            {/* Render any startup errors (OutputPanel handles error UI) */}
-            <OutputPanel artifact={null} error={conversionError} isRunning={false} />
 
             <ConversionBar
               onStart={handleStartConversion}
