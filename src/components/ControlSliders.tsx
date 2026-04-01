@@ -89,6 +89,30 @@ export const ControlSliders: React.FC<ControlSlidersProps> = ({
           />
         </div>
       </div>
+
+      {/* Optimization Tips Info Box */}
+      <div style={{
+        marginTop: 'var(--space-2)',
+        padding: 'var(--space-3)',
+        background: 'rgba(255, 255, 255, 0.02)',
+        borderRadius: 'var(--radius-md)',
+        border: '1px solid var(--border)',
+        fontSize: 'var(--text-xs)',
+        color: 'var(--text-tertiary)',
+        lineHeight: '1.4'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: '4px', color: 'var(--accent)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          💡 Optimization Tips
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div>
+            <strong style={{ color: 'var(--text-secondary)' }}>TTS Threads:</strong> Set to match your CPU cores. Most modern PCs/Laptops (4-8 cores) work best with 6-8 threads for maximum speed.
+          </div>
+          <div>
+            <strong style={{ color: 'var(--text-secondary)' }}>Chunk Size:</strong> Controls RAM usage. <strong>4000-6000</strong> is recommended. 5000 chars uses ~300MB RAM per worker (ideal for 8GB RAM). 
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
