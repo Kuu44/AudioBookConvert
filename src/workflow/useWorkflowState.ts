@@ -61,14 +61,19 @@ export function useWorkflowState() {
   const [selectedFile, setSelectedFile] = useState<SelectedFileSummary | null>(null);
   const [selectedSourceFile, setSelectedSourceFile] = useState<File | null>(null);
   const [selectedVoice, setSelectedVoice] = useState<string>('en-US-AvaMultilingualNeural');
+  const [sessionProgress, setSessionProgress] = useState(0);
+  const [showResumePrompt, setShowResumePrompt] = useState(false);
   const [chunkSizeText, setChunkSizeText] = useState(defaultChunkSize);
   const [speed, setSpeed] = useState<string>('Normal');
   const [pitch, setPitch] = useState<string>('Normal');
   const [volume, setVolume] = useState<string>('Normal');
   const [dictionaryMode, setDictionaryMode] = useState(true);
-  const [ttsThreads, setTtsThreads] = useState(Math.min(navigator.hardwareConcurrency || 6, 12));
+  const [ttsThreads, setTtsThreads] = useState(24);
   const [gapMs, setGapMs] = useState(0);
   const [streamToDisk, setStreamToDisk] = useState(false);
+  const [autoPilot, setAutoPilot] = useState(true);
+  const [performanceTier, setPerformanceTier] = useState<'turbo' | 'standard' | 'stability'>('standard');
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const [processingOptions, setProcessingOptions] = useState({
     removeSilence: false,
     normalize: false,
@@ -91,8 +96,10 @@ export function useWorkflowState() {
     eta: null
   });
 
-  const chunkSize = Number(chunkSizeText);
-  const chunkSizeValid = Number.isInteger(chunkSize) && chunkSize >= minChunkSize && chunkSize <= maxChunkSize;
+  const chunkSize = autoPilot ? 2000 : Number(chunkSizeText);
+  const threads = autoPilot ? (performanceTier === 'turbo' ? 48 : performanceTier === 'standard' ? 24 : 12) : ttsThreads;
+  
+  const chunkSizeValid = Number.isInteger(chunkSize) && chunkSize >= minChunkSize && chunkSize <= 12000;
   const voiceValid = voices.some((v) => v.value === selectedVoice);
   const canStart = Boolean(selectedFile && selectedSourceFile && voiceValid && chunkSizeValid && !fileError && !settingsError && !conversion.isRunning);
 
@@ -126,6 +133,24 @@ export function useWorkflowState() {
     setFileError(null);
   }
 
+  useEffect(() => {
+    if (selectedFile && selectedVoice && chunkSizeValid) {
+      import('./persistence').then(async ({ PersistenceService, persistence }) => {
+        const sid = PersistenceService.generateSessionId(selectedFile.name, chunkSize, selectedVoice);
+        const count = await persistence.getSessionChunksCount(sid);
+        setSessionProgress(count);
+        if (count > 0 && !conversion.isRunning) {
+          setShowResumePrompt(true);
+        } else {
+          setShowResumePrompt(false);
+        }
+      });
+    } else {
+      setSessionProgress(0);
+      setShowResumePrompt(false);
+    }
+  }, [selectedFile, selectedVoice, chunkSize, chunkSizeValid, conversion.isRunning]);
+
   const handleVoiceChange = (v: string) => setSelectedVoice(v);
   const handleChunkSizeChange = (v: string) => setChunkSizeText(v);
   const handleSpeedChange = (v: string) => setSpeed(v);
@@ -135,6 +160,18 @@ export function useWorkflowState() {
   const handleGapMsChange = (v: number) => setGapMs(v);
   const handleStreamToDiskChange = (v: boolean) => setStreamToDisk(v);
   const handleDictionaryModeChange = (v: boolean) => setDictionaryMode(v);
+  const handleAutoPilotChange = (v: boolean) => setAutoPilot(v);
+  const handlePerformanceTierChange = (v: 'turbo' | 'standard' | 'stability') => setPerformanceTier(v);
+  const handleShowAdvancedChange = (v: boolean) => setShowAdvanced(v);
+  const handleClearPersistence = async () => {
+    if (selectedFile && selectedVoice) {
+      const { PersistenceService, persistence } = await import('./persistence');
+      const sid = PersistenceService.generateSessionId(selectedFile.name, chunkSize, selectedVoice);
+      await persistence.deleteSession(sid, 999999);
+      setSessionProgress(0);
+      setShowResumePrompt(false);
+    }
+  };
   const toggleProcessingOption = (opt: keyof typeof processingOptions) => setProcessingOptions(p => ({ ...p, [opt]: !p[opt] }));
 
   async function handleStartConversion() {
@@ -163,7 +200,7 @@ export function useWorkflowState() {
         speed,
         pitch,
         volume,
-        ttsThreads,
+        ttsThreads: threads,
         gapMs,
         dictionaryMode,
         onProgress: (completed, total) => {
@@ -185,7 +222,20 @@ export function useWorkflowState() {
     }
   }
 
-  function resetWorkflow() {
+  async function resetWorkflow() {
+    // If we succeeded, we can clear the persistence to save user disk space
+    if (conversion.phase === 'succeeded' && selectedFile && selectedVoice) {
+      try {
+        const { PersistenceService, persistence } = await import('./persistence');
+        // Total chunks is artifact.chunkCount
+        const count = (conversion.artifact as any)?.chunkCount || 0;
+        const sid = PersistenceService.generateSessionId(selectedFile.name, count, selectedVoice);
+        await persistence.deleteSession(sid, count);
+      } catch (e) {
+        console.warn('Failed to clear persistence after success:', e);
+      }
+    }
+
     setConversion({
       phase: 'idle',
       artifact: null,
@@ -199,6 +249,8 @@ export function useWorkflowState() {
     setSelectedFile(null);
     setSelectedSourceFile(null);
     setTextInput('');
+    setSessionProgress(0);
+    setShowResumePrompt(false);
   }
 
   return {
@@ -207,9 +259,13 @@ export function useWorkflowState() {
     dictionaryMode, fileError, handleChunkSizeChange, handleDictionaryModeChange,
     handleFileSelection, handleSpeedChange, handlePitchChange, handleVolumeChange,
     handleTtsThreadsChange, handleGapMsChange, handleStreamToDiskChange,
+    handleAutoPilotChange, handlePerformanceTierChange, handleShowAdvancedChange,
+    handleClearPersistence,
     toggleProcessingOption, handleStartConversion, handleVoiceChange,
     selectedFile, selectedSourceFile, selectedVoice, settingsError, speed, pitch, volume,
     ttsThreads, gapMs, streamToDisk, processingOptions, voices,
+    autoPilot, performanceTier, showAdvanced,
+    sessionProgress, showResumePrompt, 
     textInput, setTextInput,
     isConversionRunning: conversion.isRunning, progress: conversion.progress, eta: conversion.eta,
     resetWorkflow

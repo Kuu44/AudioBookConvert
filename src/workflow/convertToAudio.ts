@@ -1,5 +1,6 @@
 import { stripMp3Chunk, concatenateUint8Arrays } from './mp3';
 import { EdgeTtsService } from './edgeTtsService';
+import { persistence, PersistenceService } from './persistence';
 
 const supportedAudioSourceExtensions = ['txt', 'fb2', 'epub', 'zip'] as const;
 
@@ -300,12 +301,15 @@ async function runConversion(request: ConversionRequest): Promise<ConversionSucc
 
   await delay(50);
 
+  const sessionId = PersistenceService.generateSessionId(file.name, chunks.length, voice);
+  await persistence.init();
+
   const chunkAudio: Uint8Array[] = new Array(chunks.length);
   const concurrency = Math.min(request.ttsThreads || 6, chunks.length);
   let currentIndex = 0;
   let completed = 0;
 
-  console.log(`[runConversion] Starting synthesis for ${chunks.length} chunks with concurrency ${concurrency}`);
+  console.log(`[runConversion] Starting synthesis for ${chunks.length} chunks with concurrency ${concurrency} (Session: ${sessionId})`);
 
   // Notify UI that chunking is done and synthesis is starting
   request.onProgress?.(0, chunks.length);
@@ -316,6 +320,15 @@ async function runConversion(request: ConversionRequest): Promise<ConversionSucc
       while (true) {
         const idx = currentIndex++;
         if (idx >= chunks.length) break;
+
+        // Check persistence first
+        const existingChunk = await persistence.getChunk(sessionId, idx);
+        if (existingChunk) {
+          chunkAudio[idx] = existingChunk;
+          completed += 1;
+          request.onProgress?.(completed, chunks.length);
+          continue;
+        }
 
         const chunkText = chunks[idx];
         const chunkBytes = await fetchChunkAudio(
@@ -328,6 +341,9 @@ async function runConversion(request: ConversionRequest): Promise<ConversionSucc
           idx
         );
         
+        // Save to persistence immediately
+        await persistence.saveChunk(sessionId, idx, chunkBytes);
+
         chunkAudio[idx] = chunkBytes;
         completed += 1;
         

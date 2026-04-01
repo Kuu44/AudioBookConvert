@@ -7,10 +7,13 @@ interface ConversionBarProps {
   canStart: boolean;
   progress: { completed: number; total: number };
   eta: string | null;
+  sessionProgress?: number;
+  showResumePrompt?: boolean;
+  onClearSession?: () => void;
 }
 
 export const ConversionBar: React.FC<ConversionBarProps> = ({
-  onStart, isRunning, canStart, progress, eta
+  onStart, isRunning, canStart, progress, eta, sessionProgress = 0, showResumePrompt = false, onClearSession
 }) => {
   return (
     <div className="conversion-bar">
@@ -27,18 +30,33 @@ export const ConversionBar: React.FC<ConversionBarProps> = ({
           </div>
         )}
         
-        <button 
-          className="start-btn" 
-          onClick={onStart}
-          disabled={!canStart || isRunning}
-          style={{
-            minWidth: '200px',
-            background: isRunning ? 'var(--bg-elevated)' : 'var(--accent-gradient)',
-            color: isRunning ? 'var(--text-tertiary)' : 'white'
-          }}
-        >
-          {isRunning ? 'Processing...' : 'Start Conversion'}
-        </button>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+          {showResumePrompt && (
+            <button 
+              type="button" 
+              onClick={onClearSession}
+              style={{
+                background: 'none', border: 'none', color: 'var(--text-tertiary)', 
+                fontSize: '10px', textDecoration: 'underline', cursor: 'pointer',
+                padding: '0 4px'
+              }}
+            >
+              Clear saved progress
+            </button>
+          )}
+          <button 
+            className="start-btn" 
+            onClick={onStart}
+            disabled={!canStart || isRunning}
+            style={{
+              minWidth: '200px',
+              background: isRunning ? 'var(--bg-elevated)' : 'var(--accent-gradient)',
+              color: isRunning ? 'var(--text-tertiary)' : 'white'
+            }}
+          >
+            {isRunning ? 'Processing...' : (showResumePrompt ? `Resume (${sessionProgress} saved)` : 'Start Conversion')}
+          </button>
+        </div>
       </div>
     </div>
   );
