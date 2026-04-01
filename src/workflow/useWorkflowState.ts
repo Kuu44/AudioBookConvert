@@ -1,19 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { convertToAudio, normalizeConversionError, type ConversionArtifact, type ConversionPhase } from './convertToAudio';
+import { voices } from './voices';
 
 const supportedFileExtensions = ['txt', 'fb2', 'epub', 'zip'] as const;
-const supportedVoices = [
-  { value: 'en-US-AriaNeural', label: 'Aria (en-US)' },
-  { value: 'en-US-GuyNeural', label: 'Guy (en-US)' },
-  { value: 'en-GB-LibbyNeural', label: 'Libby (en-GB)' }
-] as const;
-const supportedSpeeds = ['Slow', 'Normal', 'Fast'] as const;
-
+const defaultChunkSize = '4000';
 const minChunkSize = 400;
-const maxChunkSize = 4000;
-const defaultChunkSize = '1200';
-
-export type SupportedVoiceValue = (typeof supportedVoices)[number]['value'];
-export type SupportedSpeedValue = (typeof supportedSpeeds)[number];
+const maxChunkSize = 12000;
 
 export type SelectedFileSummary = {
   name: string;
@@ -22,25 +14,31 @@ export type SelectedFileSummary = {
   type: string;
 };
 
+type ConversionState = {
+  phase: ConversionPhase;
+  artifact: ConversionArtifact | null;
+  error: string | null;
+  errorCode: string | null;
+  isRunning: boolean;
+  progress: { completed: number; total: number };
+  startTime: number | null;
+  eta: string | null;
+};
+
 function getExtension(fileName: string) {
   const lastDot = fileName.lastIndexOf('.');
   return lastDot >= 0 ? fileName.slice(lastDot + 1).toLowerCase() : '';
 }
 
 function formatBytes(bytes: number) {
-  if (bytes < 1024) {
-    return `${bytes} B`;
-  }
-
+  if (bytes < 1024) return `${bytes} B`;
   const units = ['KB', 'MB', 'GB'];
   let current = bytes / 1024;
   let unitIndex = 0;
-
   while (current >= 1024 && unitIndex < units.length - 1) {
     current /= 1024;
     unitIndex += 1;
   }
-
   return `${current.toFixed(current >= 10 ? 0 : 1)} ${units[unitIndex]}`;
 }
 
@@ -50,7 +48,6 @@ function isSupportedExtension(extension: string) {
 
 function createFileSummary(file: File): SelectedFileSummary {
   const extension = getExtension(file.name);
-
   return {
     name: file.name,
     extension: extension || 'unknown',
@@ -60,130 +57,163 @@ function createFileSummary(file: File): SelectedFileSummary {
 }
 
 export function useWorkflowState() {
+  const [textInput, setTextInput] = useState('');
   const [selectedFile, setSelectedFile] = useState<SelectedFileSummary | null>(null);
-  const [selectedVoice, setSelectedVoice] = useState<string>('');
+  const [selectedSourceFile, setSelectedSourceFile] = useState<File | null>(null);
+  const [selectedVoice, setSelectedVoice] = useState<string>('en-US-AvaMultilingualNeural');
   const [chunkSizeText, setChunkSizeText] = useState(defaultChunkSize);
-  const [speed, setSpeed] = useState<SupportedSpeedValue>('Normal');
+  const [speed, setSpeed] = useState<string>('Normal');
+  const [pitch, setPitch] = useState<string>('Normal');
+  const [volume, setVolume] = useState<string>('Normal');
   const [dictionaryMode, setDictionaryMode] = useState(true);
+  const [ttsThreads, setTtsThreads] = useState(Math.min(navigator.hardwareConcurrency || 6, 12));
+  const [gapMs, setGapMs] = useState(0);
+  const [streamToDisk, setStreamToDisk] = useState(false);
+  const [processingOptions, setProcessingOptions] = useState({
+    removeSilence: false,
+    normalize: false,
+    compressor: false,
+    fadeIn: false,
+    eq: false,
+    deEss: false
+  });
+
   const [fileError, setFileError] = useState<string | null>(null);
   const [settingsError, setSettingsError] = useState<string | null>(null);
+  const [conversion, setConversion] = useState<ConversionState>({
+    phase: 'idle',
+    artifact: null,
+    error: null,
+    errorCode: null,
+    isRunning: false,
+    progress: { completed: 0, total: 0 },
+    startTime: null,
+    eta: null
+  });
 
   const chunkSize = Number(chunkSizeText);
   const chunkSizeValid = Number.isInteger(chunkSize) && chunkSize >= minChunkSize && chunkSize <= maxChunkSize;
-  const voiceValid = supportedVoices.some((voice) => voice.value === selectedVoice);
-  const canStart = Boolean(selectedFile && voiceValid && chunkSizeValid && !fileError && !settingsError);
+  const voiceValid = voices.some((v) => v.value === selectedVoice);
+  const canStart = Boolean(selectedFile && selectedSourceFile && voiceValid && chunkSizeValid && !fileError && !settingsError && !conversion.isRunning);
 
-  const accept = supportedFileExtensions.map((extension) => `.${extension}`).join(', ');
+  const accept = supportedFileExtensions.map((ext) => `.${ext}`).join(', ');
+  const activeJobId = useRef(0);
+  const artifactUrlRef = useRef<string | null>(null);
 
-  const statusSummary = useMemo(() => {
-    if (fileError) {
-      return fileError;
-    }
-
-    if (!selectedFile) {
-      return 'No file selected yet. Pick a supported source file to unlock conversion.';
-    }
-
-    return `Loaded ${selectedFile.name} (${selectedFile.extension.toUpperCase()}, ${formatBytes(selectedFile.size)}).`;
-  }, [fileError, selectedFile]);
-
-  const voiceSummary = useMemo(() => {
-    if (!voiceValid) {
-      return 'Voice is not selected yet.';
-    }
-
-    return `Voice selected: ${selectedVoice}.`;
-  }, [selectedVoice, voiceValid]);
-
-  const settingsSummary = useMemo(() => {
-    if (settingsError) {
-      return settingsError;
-    }
-
-    return `Chunk size ${chunkSizeText} characters, speed ${speed}, dictionary mode ${dictionaryMode ? 'on' : 'off'}.`;
-  }, [chunkSizeText, dictionaryMode, settingsError, speed]);
-
-  const readinessSummary = useMemo(() => {
-    if (canStart) {
-      return 'Ready to start conversion.';
-    }
-
-    return 'Start conversion is blocked until a supported file, a voice, and valid settings are present.';
-  }, [canStart]);
+  useEffect(() => {
+    return () => {
+      if (artifactUrlRef.current) URL.revokeObjectURL(artifactUrlRef.current);
+    };
+  }, []);
 
   function handleFileSelection(fileList: FileList | null) {
     if (!fileList || fileList.length === 0) {
+      setSelectedFile(null);
+      setSelectedSourceFile(null);
       setFileError('Select a TXT, FB2, EPUB, or ZIP file to continue.');
       return;
     }
-
     const file = fileList[0];
     const extension = getExtension(file.name);
-
     if (!isSupportedExtension(extension)) {
-      setFileError(`Unsupported file type: .${extension || 'unknown'}. Use TXT, FB2, EPUB, or ZIP.`);
+      setSelectedFile(null);
+      setSelectedSourceFile(null);
+      setFileError(`Unsupported file: .${extension}. Use TXT, FB2, EPUB, or ZIP.`);
       return;
     }
-
     setSelectedFile(createFileSummary(file));
+    setSelectedSourceFile(file);
     setFileError(null);
   }
 
-  function handleVoiceChange(nextVoice: string) {
-    setSelectedVoice(nextVoice);
+  const handleVoiceChange = (v: string) => setSelectedVoice(v);
+  const handleChunkSizeChange = (v: string) => setChunkSizeText(v);
+  const handleSpeedChange = (v: string) => setSpeed(v);
+  const handlePitchChange = (v: string) => setPitch(v);
+  const handleVolumeChange = (v: string) => setVolume(v);
+  const handleTtsThreadsChange = (v: number) => setTtsThreads(v);
+  const handleGapMsChange = (v: number) => setGapMs(v);
+  const handleStreamToDiskChange = (v: boolean) => setStreamToDisk(v);
+  const handleDictionaryModeChange = (v: boolean) => setDictionaryMode(v);
+  const toggleProcessingOption = (opt: keyof typeof processingOptions) => setProcessingOptions(p => ({ ...p, [opt]: !p[opt] }));
+
+  async function handleStartConversion() {
+    if (!canStart || !selectedSourceFile) return;
+
+    const nextJobId = activeJobId.current + 1;
+    activeJobId.current = nextJobId;
+
+    const startTime = Date.now();
+    setConversion({
+      phase: 'converting',
+      artifact: null,
+      error: null,
+      errorCode: null,
+      isRunning: true,
+      progress: { completed: 0, total: 0 },
+      startTime,
+      eta: 'Calculating...'
+    });
+
+    try {
+      const result = await convertToAudio({
+        file: selectedSourceFile,
+        voice: selectedVoice,
+        chunkSize,
+        speed,
+        pitch,
+        volume,
+        ttsThreads,
+        gapMs,
+        dictionaryMode,
+        onProgress: (completed, total) => {
+          const now = Date.now();
+          const perChunk = completed > 0 ? (now - startTime) / completed : 0;
+          const etaMs = perChunk * (total - completed);
+          const etaStr = etaMs > 60000 ? `~${Math.ceil(etaMs / 60000)}m remaining` : etaMs > 0 ? `~${Math.ceil(etaMs / 1000)}s remaining` : 'Calculating...';
+          setConversion(c => ({ ...c, progress: { completed, total }, eta: etaStr }));
+        }
+      });
+
+      if (activeJobId.current !== nextJobId) return;
+      artifactUrlRef.current = result.artifact.url;
+      setConversion(c => ({ ...c, phase: 'succeeded', artifact: result.artifact, isRunning: false }));
+    } catch (err) {
+      if (activeJobId.current !== nextJobId) return;
+      const failure = normalizeConversionError(err);
+      setConversion(c => ({ ...c, phase: 'failed', error: failure.message, errorCode: failure.code, isRunning: false }));
+    }
   }
 
-  function handleChunkSizeChange(nextChunkSizeText: string) {
-    setChunkSizeText(nextChunkSizeText);
-
-    if (nextChunkSizeText.trim().length === 0) {
-      setSettingsError('Chunk size is required.');
-      return;
-    }
-
-    const nextValue = Number(nextChunkSizeText);
-    if (!Number.isInteger(nextValue) || nextValue < minChunkSize || nextValue > maxChunkSize) {
-      setSettingsError(`Chunk size must stay between ${minChunkSize} and ${maxChunkSize}.`);
-      return;
-    }
-
-    setSettingsError(null);
-  }
-
-  function handleSpeedChange(nextSpeed: string) {
-    if (supportedSpeeds.includes(nextSpeed as SupportedSpeedValue)) {
-      setSpeed(nextSpeed as SupportedSpeedValue);
-      setSettingsError(null);
-      return;
-    }
-
-    setSettingsError('Select one of the supported speed options.');
-  }
-
-  function handleDictionaryModeChange(nextDictionaryMode: boolean) {
-    setDictionaryMode(nextDictionaryMode);
+  function resetWorkflow() {
+    setConversion({
+      phase: 'idle',
+      artifact: null,
+      error: null,
+      errorCode: null,
+      isRunning: false,
+      progress: { completed: 0, total: 0 },
+      startTime: null,
+      eta: null
+    });
+    setSelectedFile(null);
+    setSelectedSourceFile(null);
+    setTextInput('');
   }
 
   return {
-    accept,
-    canStart,
-    chunkSizeText,
-    dictionaryMode,
-    fileError,
-    handleChunkSizeChange,
-    handleDictionaryModeChange,
-    handleFileSelection,
-    handleSpeedChange,
-    handleVoiceChange,
-    readinessSummary,
-    selectedFile,
-    selectedVoice,
-    settingsError,
-    settingsSummary,
-    speed,
-    statusSummary,
-    supportedVoices,
-    voiceSummary,
-    voiceValid
+    accept, canStart, chunkSizeText, conversionArtifact: conversion.artifact,
+    conversionError: conversion.error, conversionPhase: conversion.phase,
+    dictionaryMode, fileError, handleChunkSizeChange, handleDictionaryModeChange,
+    handleFileSelection, handleSpeedChange, handlePitchChange, handleVolumeChange,
+    handleTtsThreadsChange, handleGapMsChange, handleStreamToDiskChange,
+    toggleProcessingOption, handleStartConversion, handleVoiceChange,
+    selectedFile, selectedSourceFile, selectedVoice, settingsError, speed, pitch, volume,
+    ttsThreads, gapMs, streamToDisk, processingOptions, voices,
+    textInput, setTextInput,
+    isConversionRunning: conversion.isRunning, progress: conversion.progress, eta: conversion.eta,
+    resetWorkflow
   };
 }
+
+

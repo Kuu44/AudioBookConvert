@@ -26,3 +26,12 @@ vendor/
 coverage/
 .cache/
 tmp/
+.mcp.json
+*.log
+curllog.txt
+downloads/
+input*.txt
+short-sample*.txt
+upstream-EdgeTTS/
+*.tsbuildinfo
+.bg-shell/
