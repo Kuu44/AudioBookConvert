@@ -57,7 +57,7 @@ export function VoiceSettings({
             className="number-input"
             inputMode="numeric"
             min={400}
-            max={4000}
+            max={12000}
             type="number"
             value={chunkSizeText}
             onChange={(event) => onChunkSizeChange(event.currentTarget.value)}

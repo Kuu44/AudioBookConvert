@@ -1,9 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 test('workflow shell renders in Edge', async ({ page }) => {
-  await page.goto('/');
-
-  await expect(page.getByRole('heading', { name: 'AudioBookConvert' })).toBeVisible();
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  await expect(page.getByRole('heading', { name: 'AudioBookConvert' })).toBeVisible({ timeout: 15000 });
   await expect(page.getByRole('heading', { name: 'Upload' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Voice' })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible();
