@@ -8,10 +8,16 @@ interface ControlSlidersProps {
   onPitchChange: (pitch: string) => void;
   volume: string;
   onVolumeChange: (volume: string) => void;
-  ttsThreads: number;
-  onTtsThreadsChange: (threads: number) => void;
   chunkSize: string;
   onChunkSizeChange: (chunkSize: string) => void;
+  ttsThreads: number;
+  onTtsThreadsChange: (threads: number) => void;
+  autoPilot: boolean;
+  onAutoPilotChange: (autoPilot: boolean) => void;
+  performanceTier: 'turbo' | 'standard' | 'stability';
+  onPerformanceTierChange: (tier: 'turbo' | 'standard' | 'stability') => void;
+  showAdvanced: boolean;
+  onShowAdvancedChange: (show: boolean) => void;
 }
 
 export const ControlSliders: React.FC<ControlSlidersProps> = ({
@@ -19,7 +25,10 @@ export const ControlSliders: React.FC<ControlSlidersProps> = ({
   pitch, onPitchChange,
   volume, onVolumeChange,
   ttsThreads, onTtsThreadsChange,
-  chunkSize, onChunkSizeChange
+  chunkSize, onChunkSizeChange,
+  autoPilot, onAutoPilotChange,
+  performanceTier, onPerformanceTierChange,
+  showAdvanced, onShowAdvancedChange
 }) => {
   const speeds = ['Very Slow', 'Slow', 'Normal', 'Fast', 'Very Fast'];
   const pitches = ['Very Low', 'Low', 'Normal', 'High', 'Very High'];
@@ -69,38 +78,123 @@ export const ControlSliders: React.FC<ControlSlidersProps> = ({
         />
       </div>
 
-      <div style={{ display: 'flex', gap: 'var(--space-4)', marginTop: 'var(--space-2)' }}>
-        <div className="control-group" style={{ flex: 1 }}>
-          <label className="label-row" style={{ fontSize: 'var(--text-xs)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>Parallel Workers</label>
-          <span style={{ fontSize: '9px', opacity: 0.5, fontWeight: 400, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
-            1 worker = 1 CPU core. More = Quicker conversion
-          </span>
-          <CustomNumberInput
-            value={ttsThreads}
-            min={1} max={15}
-            onChange={onTtsThreadsChange}
-            ariaLabel="Number of parallel synthesis workers"
-          />
+      <div style={{ 
+        marginTop: 'var(--space-6)', 
+        paddingTop: 'var(--space-4)', 
+        borderTop: '1px solid var(--border)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--space-4)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <span style={{ fontWeight: 600, color: 'var(--text-secondary)' }}>Auto-Pilot Mode</span>
+            {autoPilot && <span className="badge" style={{ background: 'var(--accent)', color: 'white', fontSize: '10px', padding: '2px 6px', borderRadius: '10px' }}>Recommended</span>}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
+            <label className="toggle-switch">
+              <input 
+                type="checkbox" 
+                checked={autoPilot} 
+                onChange={(e) => onAutoPilotChange(e.target.checked)} 
+              />
+              <span className="slider"></span>
+            </label>
+            <button 
+              type="button"
+              onClick={() => onShowAdvancedChange(!showAdvanced)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: showAdvanced ? 'var(--accent)' : 'var(--text-tertiary)',
+                cursor: 'pointer',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+                transition: 'color 0.2s ease'
+              }}
+              title="Advanced Settings"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="4" y1="21" x2="4" y2="14"></line>
+                <line x1="4" y1="10" x2="4" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12" y2="3"></line>
+                <line x1="20" y1="21" x2="20" y2="16"></line>
+                <line x1="20" y1="12" x2="20" y2="3"></line>
+                <line x1="1" y1="14" x2="7" y2="14"></line>
+                <line x1="9" y1="8" x2="15" y2="8"></line>
+                <line x1="17" y1="16" x2="23" y2="16"></line>
+              </svg>
+            </button>
+          </div>
         </div>
-        <div className="control-group" style={{ flex: 1 }}>
-          <label className="label-row" style={{ fontSize: 'var(--text-xs)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
-            <span>Chunk Size</span>
-            <span style={{ fontSize: '9px', opacity: 0.5, fontWeight: 400 }}>
-              {chunkSize} chars (~{Math.round(Number(chunkSize) * 0.06)}MB x {ttsThreads} workers = {Math.round(Number(chunkSize) * 0.06 * ttsThreads) > 1024 ? `${(Math.round(Number(chunkSize) * 0.06 * ttsThreads) / 1024).toFixed(2)} GB` : `${Math.round(Number(chunkSize) * 0.06 * ttsThreads)} MB`} RAM)
-            </span>
-          </label>
-          <CustomNumberInput
-            value={chunkSize}
-            min={400} max={8000} step={100}
-            onChange={(val) => onChunkSizeChange(val.toString())}
-            ariaLabel="Number of characters per synthesis request"
-          />
-        </div>
+
+        {autoPilot && (
+          <div className="tier-selector" style={{ background: 'rgba(255, 255, 255, 0.03)', borderRadius: 'var(--radius-md)', padding: 'var(--space-2)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-2)' }}>
+            {(['stability', 'standard', 'turbo'] as const).map((tier) => (
+              <button
+                key={tier}
+                onClick={() => onPerformanceTierChange(tier)}
+                style={{
+                  padding: '12px 4px',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid',
+                  borderColor: performanceTier === tier ? 'var(--accent)' : 'transparent',
+                  background: performanceTier === tier ? 'rgba(var(--accent-rgb), 0.1)' : 'transparent',
+                  color: performanceTier === tier ? 'var(--accent)' : 'var(--text-tertiary)',
+                  fontSize: 'var(--text-xs)',
+                  fontWeight: 600,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '4px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  textAlign: 'center'
+                }}
+              >
+                <span style={{ textTransform: 'capitalize' }}>{tier}</span>
+                <span style={{ fontSize: '9px', fontWeight: 400, opacity: 0.6 }}>
+                  {tier === 'turbo' ? '48 Cores' : tier === 'standard' ? '24 Cores' : '12 Cores'}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {showAdvanced && (
+          <div style={{ display: 'flex', gap: 'var(--space-4)', padding: 'var(--space-3)', background: 'rgba(255, 255, 255, 0.01)', borderRadius: 'var(--radius-md)', border: '1px dashed var(--border)' }}>
+            <div className="control-group" style={{ flex: 1 }}>
+              <label className="label-row" style={{ fontSize: 'var(--text-xs)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
+                Workers
+              </label>
+              <CustomNumberInput
+                value={ttsThreads}
+                min={1} max={64}
+                onChange={onTtsThreadsChange}
+                ariaLabel="Number of parallel synthesis workers"
+                disabled={autoPilot}
+              />
+            </div>
+            <div className="control-group" style={{ flex: 1 }}>
+              <label className="label-row" style={{ fontSize: 'var(--text-xs)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
+                Chunk size
+              </label>
+              <CustomNumberInput
+                value={chunkSize}
+                min={400} max={12000} step={100}
+                onChange={(val) => onChunkSizeChange(val.toString())}
+                ariaLabel="Number of characters per synthesis request"
+                disabled={autoPilot}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Optimization Tips Info Box */}
       <div style={{
-        marginTop: 'var(--space-2)',
+        marginTop: 'var(--space-6)',
         padding: 'var(--space-3)',
         background: 'rgba(255, 255, 255, 0.02)',
         borderRadius: 'var(--radius-md)',
@@ -114,10 +208,10 @@ export const ControlSliders: React.FC<ControlSlidersProps> = ({
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <div>
-            <strong style={{ color: 'var(--text-secondary)' }}>Parallel Workers:</strong> Set to match your CPU cores. Modern PCs (4-8+ cores) work best with 6-12 workers for maximum speed.
+            <strong style={{ color: 'var(--text-secondary)' }}>Auto-Pilot:</strong> Optimized for stability. Turbo mode uses 48 parallel workers for maximum synthesis speed.
           </div>
           <div>
-            <strong style={{ color: 'var(--text-secondary)' }}>Chunk Size:</strong> Controls RAM usage per worker. <strong>4000-8000</strong> chars is the sweet spot.
+            <strong style={{ color: 'var(--text-secondary)' }}>Crash-Resilient:</strong> All progress is saved automatically to local storage. If Edge crashes, just reload and re-select the file to resume!
           </div>
         </div>
       </div>

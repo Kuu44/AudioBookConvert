@@ -41,10 +41,19 @@ export function App() {
     ttsThreads,
     gapMs,
     streamToDisk,
+    autoPilot,
+    performanceTier,
+    showAdvanced,
+    handleAutoPilotChange,
+    handlePerformanceTierChange,
+    handleShowAdvancedChange,
     processingOptions,
     isConversionRunning,
     progress,
     eta,
+    sessionProgress,
+    showResumePrompt,
+    handleClearPersistence,
     selectedSourceFile,
     textInput,
     setTextInput,
@@ -134,6 +143,9 @@ export function App() {
                       volume={volume} onVolumeChange={handleVolumeChange}
                       ttsThreads={ttsThreads} onTtsThreadsChange={handleTtsThreadsChange}
                       chunkSize={chunkSizeText} onChunkSizeChange={handleChunkSizeChange}
+                      autoPilot={autoPilot} onAutoPilotChange={handleAutoPilotChange}
+                      performanceTier={performanceTier} onPerformanceTierChange={handlePerformanceTierChange}
+                      showAdvanced={showAdvanced} onShowAdvancedChange={handleShowAdvancedChange}
                     />
                   </div>
                 </div>
@@ -160,6 +172,9 @@ export function App() {
               canStart={canStart}
               progress={progress}
               eta={eta}
+              sessionProgress={sessionProgress}
+              showResumePrompt={showResumePrompt}
+              onClearSession={handleClearPersistence}
             />
           </>
         )}

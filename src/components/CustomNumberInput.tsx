@@ -7,10 +7,11 @@ interface CustomNumberInputProps {
   step?: number;
   onChange: (value: number) => void;
   ariaLabel: string;
+  disabled?: boolean;
 }
 
 export const CustomNumberInput: React.FC<CustomNumberInputProps> = ({
-  value, min, max, step = 1, onChange, ariaLabel
+  value, min, max, step = 1, onChange, ariaLabel, disabled = false
 }) => {
   const numValue = typeof value === 'string' ? parseInt(value) || min : value;
 
@@ -28,8 +29,8 @@ export const CustomNumberInput: React.FC<CustomNumberInputProps> = ({
         type="button"
         className="number-input-btn" 
         onClick={handleDecrement}
-        disabled={numValue <= min}
-        style={{ opacity: numValue <= min ? 0.3 : 1 }}
+        disabled={disabled || numValue <= min}
+        style={{ opacity: (disabled || numValue <= min) ? 0.3 : 1 }}
         aria-label={`Decrease ${ariaLabel}`}
       >
         −
@@ -39,13 +40,15 @@ export const CustomNumberInput: React.FC<CustomNumberInputProps> = ({
         value={value} 
         onChange={(e) => onChange(parseInt(e.target.value) || min)}
         aria-label={ariaLabel}
+        disabled={disabled}
+        style={{ opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'auto' }}
       />
       <button 
         type="button"
         className="number-input-btn" 
         onClick={handleIncrement}
-        disabled={numValue >= max}
-        style={{ opacity: numValue >= max ? 0.3 : 1 }}
+        disabled={disabled || numValue >= max}
+        style={{ opacity: (disabled || numValue >= max) ? 0.3 : 1 }}
         aria-label={`Increase ${ariaLabel}`}
       >
         +
