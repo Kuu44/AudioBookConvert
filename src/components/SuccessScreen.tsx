@@ -1,7 +1,8 @@
 import React from 'react';
+import { type ConversionArtifact } from '../workflow/convertToAudio';
 
 interface SuccessScreenProps {
-  artifact: any; // Using any or specific type from useWorkflowState if exported well
+  artifact: ConversionArtifact | null;
   onReset: () => void;
 }
 
@@ -84,6 +85,36 @@ export const SuccessScreen: React.FC<SuccessScreenProps> = ({ artifact, onReset 
           <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>MIME</div>
           <div style={{ fontWeight: 600, fontSize: 'var(--text-sm)' }}>{artifact.mimeType} / MP3</div>
         </div>
+      </div>
+
+      <div className="glass-card" style={{
+        marginTop: 'var(--space-2)',
+        width: '100%',
+        maxWidth: '500px',
+        background: 'rgba(59, 130, 246, 0.05)',
+        border: '1px solid rgba(96, 165, 250, 0.18)',
+        padding: 'var(--space-4)',
+        textAlign: 'left'
+      }}>
+        <div style={{ fontSize: 'var(--text-xs)', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Source Cleanup</div>
+        <div style={{ fontWeight: 700, fontSize: 'var(--text-sm)', marginTop: 'var(--space-1)' }}>
+          {artifact.sourceCleanup.removedParagraphBlocks > 0
+            ? `${artifact.sourceCleanup.removedParagraphBlocks} repeated block${artifact.sourceCleanup.removedParagraphBlocks === 1 ? '' : 's'} removed`
+            : 'No repeated passage blocks detected'}
+        </div>
+        <div style={{ marginTop: 'var(--space-2)', color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', lineHeight: 1.5 }}>
+          {artifact.sourceCleanup.removedWordCount > 0
+            ? `${artifact.sourceCleanup.removedWordCount} words were removed before synthesis.`
+            : 'The cleaned text was passed through unchanged before synthesis.'}
+        </div>
+        <div style={{ marginTop: 'var(--space-2)', color: 'var(--text-secondary)', fontSize: 'var(--text-sm)', lineHeight: 1.5 }}>
+          Word-safe chunking stayed enabled for the full conversion.
+        </div>
+        {artifact.sourceCleanup.repeatedBlockSamples.length > 0 && (
+          <div style={{ marginTop: 'var(--space-3)', color: 'var(--text-primary)', fontSize: 'var(--text-sm)', lineHeight: 1.5 }}>
+            Example removed block: “{artifact.sourceCleanup.repeatedBlockSamples[0].preview}” <span style={{ color: 'var(--text-secondary)' }}>×{artifact.sourceCleanup.repeatedBlockSamples[0].occurrences}</span>
+          </div>
+        )}
       </div>
 
       <div style={{ display: 'flex', gap: 'var(--space-4)', marginTop: 'var(--space-6)' }}>
