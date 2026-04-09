@@ -1,11 +1,13 @@
 import { readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
 import { expect, test } from '@playwright/test';
 
 import { prepareSourceText, splitTextIntoChunks } from '../src/workflow/convertToAudio';
 
-const repeatedSamplePath = resolve('input_part_1.txt');
+const currentDir = dirname(fileURLToPath(import.meta.url));
+const repeatedSamplePath = resolve(currentDir, 'fixtures/repeated-sample.txt');
 
 test('repeated source passages are collapsed before synthesis', () => {
   const sourceText = readFileSync(repeatedSamplePath, 'utf8');

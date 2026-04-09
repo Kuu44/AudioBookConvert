@@ -1,0 +1,7 @@
+This chapter opens with a repeated passage that the cleanup pass should collapse before synthesis.
+
+This chapter opens with a repeated passage that the cleanup pass should collapse before synthesis.
+
+This chapter opens with a repeated passage that the cleanup pass should collapse before synthesis.
+
+Another distinct paragraph follows after the repeated block so the cleaner can preserve non-duplicate content.
