@@ -1,0 +1,1072 @@
+{
+  "requests": [
+    {
+      "updateFormInfo": {
+        "updateMask": "title,description",
+        "info": {
+          "description": "This form helps us set up and manage your Meta ads (Facebook and Instagram ads).\nNo technical knowledge is needed.\n\nService scope:\n- We run and manage your Meta ads.\n- We do not create video content.\n- We do not build or redesign websites.\n\nPlease answer as clearly as you can. If you are unsure, write \"Not sure yet\".",
+          "title": "Meta Ads Client Onboarding Form (Beginner Friendly)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 0
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "1acf4e39",
+          "questionItem": {
+            "question": {
+              "questionId": "34457430",
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "What is your legal business name?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 1
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "53f0d886",
+          "questionItem": {
+            "question": {
+              "questionId": "5e438ddc",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Who is the main contact for this project? (name, role, email, phone/WhatsApp)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 2
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "7b5ff759",
+          "questionItem": {
+            "question": {
+              "questionId": "0a09f204",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What are we advertising? (products/services, prices, main offer, seasonal offer)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 3
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "30950e55",
+          "questionItem": {
+            "question": {
+              "questionId": "7cc6b2bb",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Where should ad clicks go? (landing page, booking page, checkout page, WhatsApp, etc.)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 4
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "04560312",
+          "questionItem": {
+            "question": {
+              "questionId": "2664a7f5",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which countries/regions and languages should we target?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 5
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "61744d65",
+          "questionItem": {
+            "question": {
+              "questionId": "5df16961",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Why do customers choose you? Share your top 3 reasons and proof (results, testimonials, certifications)."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 6
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "Tell us what success looks like and how much you plan to spend each month.",
+          "itemId": "5b7a7057",
+          "pageBreakItem": {},
+          "title": "Goals and Budget"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 7
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "6c913b41",
+          "questionItem": {
+            "question": {
+              "questionId": "6b925d56",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What is the main goal of your Meta ads? (leads, booked calls, sales, messages)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 8
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "5659ab79",
+          "questionItem": {
+            "question": {
+              "questionId": "425a08c3",
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "What is your monthly ad budget and currency?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 9
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "075c8121",
+          "questionItem": {
+            "question": {
+              "questionId": "2147c598",
+              "textQuestion": {}
+            }
+          },
+          "title": "If known, what target numbers do you want? (cost per lead, cost per sale, or return on ad spend)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 10
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "68eddb1c",
+          "questionItem": {
+            "question": {
+              "questionId": "093e7d96",
+              "textQuestion": {}
+            }
+          },
+          "title": "If known, how many leads or sales do you want per month?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 11
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "2fb67138",
+          "questionItem": {
+            "question": {
+              "questionId": "2b5073f8",
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "When do you want us to launch the campaigns?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 12
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "The clearer your customer details are, the better we can target ads.",
+          "itemId": "7f09a794",
+          "pageBreakItem": {},
+          "title": "Audience Details"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 13
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "54721a4d",
+          "questionItem": {
+            "question": {
+              "questionId": "2ef38d25",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Describe your ideal customer (who they are, their problems, and what motivates them to buy)."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 14
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "584a01c9",
+          "questionItem": {
+            "question": {
+              "questionId": "62153c3c",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Are there any people we should NOT target?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 15
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "1d7dc6dd",
+          "questionItem": {
+            "question": {
+              "questionId": "75abef37",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Do you have customer data we can use for lookalike audiences? (past buyers, lead list, website visitors)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 16
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "28f8e1b0",
+          "questionItem": {
+            "question": {
+              "questionId": "7e553b83",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "If you ran ads before, what worked, what did not work, and what should we avoid?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 17
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "Your team provides all assets and pages. We do not produce videos or build websites in this service.",
+          "itemId": "2312b38b",
+          "pageBreakItem": {},
+          "title": "Brand and Creative Assets"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 18
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "2b975240",
+          "questionItem": {
+            "question": {
+              "questionId": "1196600b",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Share links to your brand assets (logo, colors, fonts, brand guide)."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 19
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "1338280f",
+          "questionItem": {
+            "question": {
+              "questionId": "6dcca86b",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Share links to ad creatives you already have (images/videos)."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 20
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "5a288482",
+          "questionItem": {
+            "question": {
+              "questionId": "1a5dfffe",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "If videos are not ready yet, when will your team provide them?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 21
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "0255fdfd",
+          "questionItem": {
+            "question": {
+              "questionId": "1b8f9273",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which messages are approved for ads, and which claims or words must we avoid?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 22
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "301fd7c6",
+          "questionItem": {
+            "question": {
+              "questionId": "222f5f1c",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Share ad examples you like (competitors or other brands) and tell us why."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 23
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "We need these details to connect accounts and track ad results correctly.",
+          "itemId": "6da0de47",
+          "pageBreakItem": {},
+          "title": "Meta Access and Tracking"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 24
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "6e92883a",
+          "questionItem": {
+            "question": {
+              "questionId": "76f3408c",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Share your Meta Business Manager ID, Ad Account ID, and account owner email."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 25
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "060269af",
+          "questionItem": {
+            "question": {
+              "questionId": "4b11ce3f",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Share the Facebook Page URL and Instagram handle we should run ads from."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 26
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "29d42053",
+          "questionItem": {
+            "question": {
+              "questionId": "1ce3f65d",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Do you already have Meta Pixel or Conversions API tracking set up? If yes, who can update website tracking?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 27
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "41be49a5",
+          "questionItem": {
+            "question": {
+              "questionId": "268aad38",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Where should new leads go after form/message submissions? (CRM, spreadsheet, email, WhatsApp) Who owns follow-up?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 28
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "0e579340",
+          "questionItem": {
+            "question": {
+              "questionId": "1304873c",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Is your domain verified in Meta Business Manager? Who is the technical contact for urgent fixes?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 29
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "Final details for approvals, reporting, legal rules, and billing.",
+          "itemId": "37601a17",
+          "pageBreakItem": {},
+          "title": "Workflow, Compliance, and Billing"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 30
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "61d6a244",
+          "questionItem": {
+            "question": {
+              "questionId": "68c7c315",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Who approves ad copy/creatives, and how long approvals usually take?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 31
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "226f703b",
+          "questionItem": {
+            "question": {
+              "questionId": "46e50976",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "How often do you want reports, and what would success look like in the first 60 days?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 32
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "28c46417",
+          "questionItem": {
+            "question": {
+              "questionId": "5d94e2ab",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Are there any legal rules we must follow in ads? (restricted claims, required disclaimers, banned topics)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 33
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "6e9d6d29",
+          "questionItem": {
+            "question": {
+              "questionId": "2cbc3454",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What is the legal billing entity name and billing email?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 34
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "5069dd0a",
+          "questionItem": {
+            "question": {
+              "questionId": "2bf3167d",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Billing address and tax ID (VAT/GST), if applicable."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 35
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "154bd169",
+          "questionItem": {
+            "question": {
+              "questionId": "083f22cd",
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "Who will sign the agreement? (name and job title)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 36
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "62d6cd3c",
+          "questionItem": {
+            "question": {
+              "questionId": "19ec0922",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Anything else we should know before launch?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 37
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "These extra questions improve targeting and campaign planning.",
+          "itemId": "11dd8e3f",
+          "pageBreakItem": {},
+          "title": "Extra Inputs (Optional but Helpful)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 38
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "5e2909ad",
+          "pageBreakItem": {},
+          "title": "Target Audience (Extra)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 39
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "Example: health-conscious adults aged 25-45, gym enthusiasts, busy professionals, or moms focused on family wellness.",
+          "itemId": "2bdd7c19",
+          "questionItem": {
+            "question": {
+              "questionId": "769c7a0f",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Who is your primary audience for Meta ads?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 40
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "6df7b288",
+          "questionItem": {
+            "question": {
+              "questionId": "69fba699",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Do you want separate audience groups? (for example: men vs women, athletes vs lifestyle users). If yes, describe each group."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 41
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "7c5d94f2",
+          "questionItem": {
+            "question": {
+              "choiceQuestion": {
+                "options": [
+                  {
+                    "value": "Website"
+                  },
+                  {
+                    "value": "WhatsApp"
+                  },
+                  {
+                    "value": "Messenger"
+                  },
+                  {
+                    "value": "Phone call"
+                  },
+                  {
+                    "value": "Direct checkout"
+                  }
+                ],
+                "type": "CHECKBOX"
+              },
+              "questionId": "61c8097c",
+              "required": true
+            }
+          },
+          "title": "Where do you want people to contact or buy after seeing the ad? (Select all that apply)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 42
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "20fbecaa",
+          "questionItem": {
+            "question": {
+              "questionId": "3e444dbb",
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which brands or websites do you admire? These can be competitors or unrelated brands. Share names and links."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 43
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "54ec2af2",
+          "pageBreakItem": {},
+          "title": "Product Information (Extra)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 44
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "506dfe32",
+          "questionItem": {
+            "question": {
+              "questionId": "366ae127",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Please list all current products or services, including variants (for example: flavors, sizes, plans, or packages)."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 45
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "1092d9d0",
+          "questionItem": {
+            "question": {
+              "questionId": "0a3e8796",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which product or service should we promote first in Meta ads?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 46
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "Your team provides these assets. We use them in ad campaigns, but we do not produce videos in this service.",
+          "itemId": "34203be1",
+          "questionItem": {
+            "question": {
+              "questionId": "6d716fb8",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Do you have product photos, lifestyle images, or videos ready for ads? Share links."
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 47
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "377e493c",
+          "pageBreakItem": {},
+          "title": "Unique Selling Points (What makes you different)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 48
+        },
+        "updateMask": "title,description",
+        "item": {
+          "description": "Examples: clinically tested, vegan, sustainable sourcing, doctor-formulated, transparent ingredients, fast shipping, premium support.",
+          "itemId": "088a6fa4",
+          "questionItem": {
+            "question": {
+              "questionId": "245ebd68",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What makes your brand different from competitors?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 49
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "022bbab2",
+          "questionItem": {
+            "question": {
+              "questionId": "5f28eec3",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which product benefits or claims should we highlight in ads?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 50
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "2b0dfe58",
+          "pageBreakItem": {},
+          "title": "Campaign Background (Extra)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 51
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "2076d51c",
+          "questionItem": {
+            "question": {
+              "questionId": "3dae0284",
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "What is your monthly ad budget range in AUD?"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 52
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "6a14b3e1",
+          "questionItem": {
+            "question": {
+              "questionId": "6104c1b6",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What are your short-term goals? (for example: awareness, leads, sales)"
+        }
+      }
+    },
+    {
+      "updateItem": {
+        "location": {
+          "index": 53
+        },
+        "updateMask": "title",
+        "item": {
+          "itemId": "3ae9e7b7",
+          "questionItem": {
+            "question": {
+              "questionId": "7868775d",
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What are your long-term goals? (for example: launch new line, enter new markets)"
+        }
+      }
+    }
+  ],
+  "writeControl": {
+    "requiredRevisionId": "00000033"
+  },
+  "includeFormInResponse": true
+}

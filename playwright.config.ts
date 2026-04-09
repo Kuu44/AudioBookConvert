@@ -1,5 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const browserTarget = (process.env.PLAYWRIGHT_BROWSER || (process.env.CI ? 'chromium' : 'msedge')).toLowerCase();
+const useChromium = browserTarget === 'chromium';
+
 export default defineConfig({
   testDir: './tests',
   fullyParallel: false,
@@ -19,12 +22,19 @@ export default defineConfig({
     stderr: 'pipe'
   },
   projects: [
-    {
-      name: 'msedge',
-      use: {
-        ...devices['Desktop Edge'],
-        channel: 'msedge'
-      }
-    }
+    useChromium
+      ? {
+          name: 'chromium',
+          use: {
+            ...devices['Desktop Chrome']
+          }
+        }
+      : {
+          name: 'msedge',
+          use: {
+            ...devices['Desktop Edge'],
+            channel: 'msedge'
+          }
+        }
   ]
 });

@@ -13,12 +13,10 @@ interface ProcessingSettingsProps {
   onToggle: (option: keyof ProcessingSettingsProps['options']) => void;
   gapMs: number;
   onGapChange: (gap: number) => void;
-  streamToDisk: boolean;
-  onStreamChange: (stream: boolean) => void;
 }
 
 export const ProcessingSettings: React.FC<ProcessingSettingsProps> = ({
-  options, onToggle, gapMs, onGapChange, streamToDisk, onStreamChange
+  options, onToggle, gapMs, onGapChange
 }) => {
   return (
     <div className="processing-settings" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
@@ -83,14 +81,6 @@ export const ProcessingSettings: React.FC<ProcessingSettingsProps> = ({
           value={gapMs} 
           onChange={(e) => onGapChange(parseInt(e.target.value))}
         />
-      </div>
-
-      <div className={`toggle-card ${streamToDisk ? 'active' : ''}`} onClick={() => onStreamChange(!streamToDisk)}>
-        <div className="toggle-info">
-          <span>💾 Stream to Disk</span>
-          <span>For very large audiobooks</span>
-        </div>
-        <ToggleSwitch active={streamToDisk} onToggle={() => onStreamChange(!streamToDisk)} />
       </div>
     </div>
   );

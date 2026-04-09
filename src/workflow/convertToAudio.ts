@@ -20,8 +20,27 @@ export type ConversionArtifact = {
   speed: string;
   dictionaryMode: boolean;
   textLength: number;
+  sourceCleanup: TextCleanupReport;
   generatedAt: string;
   durationMs: number;
+};
+
+export type TextCleanupSample = {
+  preview: string;
+  occurrences: number;
+  paragraphsRemoved: number;
+  wordsRemoved: number;
+};
+
+export type TextCleanupReport = {
+  originalTextLength: number;
+  cleanedTextLength: number;
+  originalWordCount: number;
+  cleanedWordCount: number;
+  removedParagraphBlocks: number;
+  removedParagraphs: number;
+  removedWordCount: number;
+  repeatedBlockSamples: TextCleanupSample[];
 };
 
 export type ConversionRequest = {
@@ -146,14 +165,150 @@ export function normalizeConversionError(error: unknown) {
   });
 }
 
-function splitTextIntoChunks(text: string, chunkSize: number) {
-  const chunks: string[] = [];
+function normalizeWhitespace(text: string) {
+  return text.replace(/\s+/g, ' ').trim();
+}
 
-  for (let offset = 0; offset < text.length; offset += chunkSize) {
-    const chunk = text.slice(offset, offset + chunkSize).trim();
-    if (chunk.length > 0) {
-      chunks.push(chunk);
+function countWords(text: string) {
+  const normalized = normalizeWhitespace(text);
+  return normalized.length === 0 ? 0 : normalized.split(' ').length;
+}
+
+function previewWords(text: string, wordLimit = 12) {
+  const normalized = normalizeWhitespace(text);
+  if (normalized.length === 0) {
+    return '';
+  }
+
+  return normalized.split(' ').slice(0, wordLimit).join(' ');
+}
+
+function splitIntoParagraphs(text: string) {
+  return text
+    .split(/\n\s*\n+/)
+    .map((paragraph) => normalizeWhitespace(paragraph))
+    .filter((paragraph) => paragraph.length > 0);
+}
+
+function blocksMatch(paragraphs: string[], leftStart: number, rightStart: number, length: number) {
+  for (let index = 0; index < length; index += 1) {
+    if (paragraphs[leftStart + index] !== paragraphs[rightStart + index]) {
+      return false;
     }
+  }
+
+  return true;
+}
+
+function collapseRepeatedParagraphBlocks(sourceText: string) {
+  const paragraphs = splitIntoParagraphs(sourceText);
+  const cleanedParagraphs: string[] = [];
+  const repeatedBlockSamples: TextCleanupSample[] = [];
+  let removedParagraphBlocks = 0;
+  let removedParagraphs = 0;
+  let removedWordCount = 0;
+  const maxBlockParagraphs = Math.min(80, paragraphs.length);
+
+  for (let start = 0; start < paragraphs.length;) {
+    let bestMatch: { length: number; repeats: number } | null = null;
+    const remaining = paragraphs.length - start;
+
+    for (let blockLength = 1; blockLength <= Math.min(maxBlockParagraphs, remaining); blockLength += 1) {
+      const block = paragraphs.slice(start, start + blockLength);
+      const blockWordCount = countWords(block.join(' '));
+      if (blockWordCount < 10) {
+        continue;
+      }
+
+      let repeats = 1;
+      while (start + (repeats * blockLength) + blockLength <= paragraphs.length) {
+        if (!blocksMatch(paragraphs, start, start + (repeats * blockLength), blockLength)) {
+          break;
+        }
+        repeats += 1;
+      }
+
+      if (repeats > 1) {
+        const currentCoverage = blockLength * repeats;
+        const bestCoverage = bestMatch ? bestMatch.length * bestMatch.repeats : 0;
+        if (!bestMatch || currentCoverage > bestCoverage || (currentCoverage === bestCoverage && blockLength > bestMatch.length)) {
+          bestMatch = { length: blockLength, repeats };
+        }
+      }
+    }
+
+    if (bestMatch) {
+      const block = paragraphs.slice(start, start + bestMatch.length);
+      const repetitionsRemoved = bestMatch.repeats - 1;
+      const blockWordCount = countWords(block.join(' '));
+
+      cleanedParagraphs.push(...block);
+      removedParagraphBlocks += repetitionsRemoved;
+      removedParagraphs += bestMatch.length * repetitionsRemoved;
+      removedWordCount += blockWordCount * repetitionsRemoved;
+      repeatedBlockSamples.push({
+        preview: previewWords(block.join(' ')),
+        occurrences: bestMatch.repeats,
+        paragraphsRemoved: bestMatch.length * repetitionsRemoved,
+        wordsRemoved: blockWordCount * repetitionsRemoved,
+      });
+
+      start += bestMatch.length * bestMatch.repeats;
+      continue;
+    }
+
+    cleanedParagraphs.push(paragraphs[start]);
+    start += 1;
+  }
+
+  const cleanedText = normalizeWhitespace(cleanedParagraphs.join('\n\n'));
+
+  return {
+    cleanedText,
+    report: {
+      originalTextLength: normalizeWhitespace(sourceText).length,
+      cleanedTextLength: cleanedText.length,
+      originalWordCount: countWords(sourceText),
+      cleanedWordCount: countWords(cleanedText),
+      removedParagraphBlocks,
+      removedParagraphs,
+      removedWordCount,
+      repeatedBlockSamples,
+    } satisfies TextCleanupReport,
+  };
+}
+
+export function prepareSourceText(sourceText: string) {
+  return collapseRepeatedParagraphBlocks(sourceText);
+}
+
+export function splitTextIntoChunks(text: string, chunkSize: number) {
+  const normalized = normalizeWhitespace(text);
+  if (normalized.length === 0) {
+    return [];
+  }
+
+  const words = normalized.split(' ');
+  const chunks: string[] = [];
+  let currentWords: string[] = [];
+  let currentLength = 0;
+
+  for (const word of words) {
+    const nextLength = currentWords.length === 0 ? word.length : currentLength + 1 + word.length;
+
+    if (currentWords.length > 0 && nextLength > chunkSize) {
+      chunks.push(currentWords.join(' '));
+      currentWords = [word];
+      currentLength = word.length;
+      continue;
+    }
+
+    currentWords.push(word);
+    currentLength = nextLength;
+  }
+
+  if (currentWords.length > 0) {
+    chunks.push(currentWords.join(' '));
   }
 
   return chunks;
@@ -288,8 +443,8 @@ async function runConversion(request: ConversionRequest): Promise<ConversionSucc
     });
   }
 
-  const normalizedText = sourceText.replace(/\s+/g, ' ').trim();
-  const chunks = splitTextIntoChunks(normalizedText, chunkSize);
+  const { cleanedText, report: sourceCleanup } = prepareSourceText(sourceText);
+  const chunks = splitTextIntoChunks(cleanedText, chunkSize);
 
   if (chunks.length === 0) {
     throw new ConversionError('No pronounceable content was found.', {
@@ -297,6 +452,18 @@ async function runConversion(request: ConversionRequest): Promise<ConversionSucc
       retryable: false,
       details: 'Text normalization removed all usable content.',
     });
+  }
+
+  if (sourceCleanup.removedParagraphBlocks > 0) {
+    console.log(
+      `[runConversion] Source cleanup removed ${sourceCleanup.removedParagraphBlocks} repeated block(s), ${sourceCleanup.removedParagraphs} paragraph(s), and ${sourceCleanup.removedWordCount} word(s).`,
+    );
+    if (sourceCleanup.repeatedBlockSamples.length > 0) {
+      const sample = sourceCleanup.repeatedBlockSamples[0];
+      console.log(`[runConversion] Cleanup sample: ${sample.preview} (x${sample.occurrences})`);
+    }
+  } else {
+    console.log('[runConversion] Source cleanup found no repeated passage blocks.');
   }
 
   await delay(50);
@@ -401,7 +568,8 @@ async function runConversion(request: ConversionRequest): Promise<ConversionSucc
       chunkCount: chunks.length,
       speed,
       dictionaryMode,
-      textLength: normalizedText.length,
+      textLength: cleanedText.length,
+      sourceCleanup,
       generatedAt: new Date().toISOString(),
       durationMs: 0,
     },

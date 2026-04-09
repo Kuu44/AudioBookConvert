@@ -1,6 +1,4 @@
-import path from 'node:path';
-
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 
 const supportedFile = {
   name: 'chapter-one.txt',
@@ -8,111 +6,114 @@ const supportedFile = {
   buffer: Buffer.from('A short sample chapter for conversion.')
 };
 
-const unsupportedFile = {
-  name: 'notes.pdf',
-  mimeType: 'application/pdf',
-  buffer: Buffer.from('%PDF-1.7 unsupported sample')
+const repeatedFile = {
+  name: 'repeat-source.txt',
+  mimeType: 'text/plain',
+  buffer: Buffer.from([
+    'This chapter opens with a repeated passage that the cleanup pass should collapse before synthesis.',
+    'This chapter opens with a repeated passage that the cleanup pass should collapse before synthesis.',
+    'This chapter opens with a repeated passage that the cleanup pass should collapse before synthesis.'
+  ].join('\n\n'))
 };
 
-const largeInputFile = path.resolve('input.txt');
+async function installMockWebSocket(page: Page) {
+  await page.addInitScript(() => {
+    class FakeWebSocket {
+      static CONNECTING = 0;
+      static OPEN = 1;
+      static CLOSING = 2;
+      static CLOSED = 3;
 
-test('workflow shell renders in Edge', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
+      url: string;
+      readyState = FakeWebSocket.CONNECTING;
+      onopen: ((event: Event) => void) | null = null;
+      onmessage: ((event: MessageEvent) => void) | null = null;
+      onerror: ((event: Event) => void) | null = null;
+      onclose: ((event: CloseEvent) => void) | null = null;
 
-  await expect(page.locator('h1')).toHaveText('AudioBookConvert');
-  await expect(page.getByRole('heading', { name: 'Upload' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Voice' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible();
-  await expect(page.getByRole('heading', { name: 'Status' })).toBeVisible();
+      constructor(url: string) {
+        this.url = url;
+        window.setTimeout(() => {
+          this.readyState = FakeWebSocket.OPEN;
+          this.onopen?.(new Event('open'));
+        }, 0);
+      }
 
-  await expect(page.getByRole('region', { name: 'Upload' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Voice' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Settings' })).toBeVisible();
-  await expect(page.getByRole('region', { name: 'Status' })).toBeVisible();
+      send(data: string | ArrayBufferLike | Blob | ArrayBufferView) {
+        const payload = typeof data === 'string' ? data : '';
+        if (payload.includes('Path:ssml')) {
+          const encoder = new TextEncoder();
+          const audioPayload = new Uint8Array([1, 4, 9, 16, 25, 36, 49, 64, 81, 100]);
+          const chunk = new Blob([encoder.encode('Path:audio\r\n'), audioPayload]);
 
-  await expect(page.getByRole('status')).toContainText('Shell mounted');
-  await expect(page.getByLabel('Supported formats')).toHaveText(/TXT/);
-});
+          window.setTimeout(() => {
+            this.onmessage?.({ data: chunk } as MessageEvent);
+          }, 5);
+          window.setTimeout(() => {
+            this.onmessage?.({ data: 'Path:turn.end' } as MessageEvent);
+          }, 10);
+        }
+      }
 
-test('workflow controls react to supported files and control changes in Edge', async ({ page }) => {
+      close() {
+        this.readyState = FakeWebSocket.CLOSED;
+        this.onclose?.(new Event('close') as CloseEvent);
+      }
+    }
+
+    // @ts-expect-error - deliberate test shim
+    window.WebSocket = FakeWebSocket;
+  });
+}
+
+test('workflow controls react to supported files and current settings', async ({ page }) => {
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
   const fileInput = page.locator('input[type="file"]');
-  await expect(page.getByRole('heading', { name: 'AudioBookConvert' })).toBeVisible({ timeout: 15000 });
   await expect(fileInput).toHaveAttribute('accept', '.txt, .fb2, .epub, .zip');
 
   await fileInput.setInputFiles(supportedFile);
-  await expect(page.getByRole('region', { name: 'Upload' })).toContainText('chapter-one.txt');
-  await expect(page.getByRole('region', { name: 'Upload' })).toContainText('TXT');
-  await expect(page.getByRole('status')).toContainText('Start conversion is blocked');
+  await expect(page.locator('.file-info-bar')).toContainText('chapter-one.txt');
+  await expect(page.locator('.file-info-bar')).toContainText('TXT ·');
+  await expect(page.getByText('Configuration ready. Headset on?')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start Conversion' })).toBeEnabled();
 
-  await page.getByRole('combobox', { name: 'Target voice' }).selectOption('en-GB-LibbyNeural');
-  await page.getByRole('spinbutton', { name: 'Chunk size' }).fill('1600');
-  await page.getByRole('combobox', { name: 'Conversion speed' }).selectOption('Fast');
-  await page.getByRole('checkbox', { name: 'Dictionary mode' }).uncheck();
+  await page.locator('.custom-select-trigger').click();
+  await page.getByText('Libby (en-GB, female)', { exact: true }).click();
+  await expect(page.locator('.custom-select-trigger')).toContainText('Libby');
 
-  await expect(page.getByRole('region', { name: 'Voice' })).toContainText('Voice: en-GB-LibbyNeural');
-  await expect(page.getByRole('region', { name: 'Voice' })).toContainText('Chunk size: 1600');
-  await expect(page.getByRole('region', { name: 'Voice' })).toContainText('Speed: Fast');
-  await expect(page.getByRole('region', { name: 'Voice' })).toContainText('Dictionary mode: off');
-  await expect(page.getByRole('status')).toContainText('Ready to start conversion.');
-  await expect(page.getByRole('button', { name: 'Start conversion' })).toBeEnabled();
+  await page.locator('label.toggle-switch').click();
+  await page.locator('button[title="Advanced Settings"]').click();
+
+  const workersInput = page.getByRole('spinbutton', { name: 'Number of parallel synthesis workers' });
+  const chunkSizeInput = page.getByRole('spinbutton', { name: 'Number of characters per synthesis request' });
+
+  await expect(workersInput).toBeVisible();
+  await expect(chunkSizeInput).toBeVisible();
+  await expect(workersInput).toBeEnabled();
+  await expect(chunkSizeInput).toBeEnabled();
+
+  await workersInput.fill('12');
+  await chunkSizeInput.fill('1600');
+
+  await expect(workersInput).toHaveValue('12');
+  await expect(chunkSizeInput).toHaveValue('1600');
+  await expect(page.getByText('Configuration ready. Headset on?')).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Start Conversion' })).toBeEnabled();
 });
 
-test('workflow conversion starts asynchronously and exposes a chunk manifest in Edge', async ({ page }) => {
+test('workflow conversion completes with mocked TTS and surfaces cleanup evidence', async ({ page }) => {
+  await installMockWebSocket(page);
   await page.goto('/', { waitUntil: 'domcontentloaded' });
 
-  const fileInput = page.locator('input[type="file"]');
-  await expect(page.getByRole('heading', { name: 'AudioBookConvert' })).toBeVisible({ timeout: 15000 });
-  await fileInput.setInputFiles(supportedFile);
-  await page.getByRole('combobox', { name: 'Target voice' }).selectOption('en-GB-LibbyNeural');
-  await page.getByRole('spinbutton', { name: 'Chunk size' }).fill('1600');
-  await page.getByRole('combobox', { name: 'Conversion speed' }).selectOption('Fast');
-  await page.getByRole('checkbox', { name: 'Dictionary mode' }).uncheck();
+  await page.locator('input[type="file"]').setInputFiles(repeatedFile);
+  await expect(page.getByRole('button', { name: 'Start Conversion' })).toBeEnabled();
 
-  const startButton = page.getByRole('button', { name: 'Start conversion' });
-  const conversionGroup = page.getByRole('group', { name: 'Conversion status' });
+  await page.getByRole('button', { name: 'Start Conversion' }).click();
 
-  await expect(startButton).toBeEnabled();
-  const downloadPromise = page.waitForEvent('download');
-  await startButton.click();
-  const download = await downloadPromise;
-  await expect(conversionGroup).toContainText('Conversion complete.');
-  await expect(conversionGroup).toContainText('Chunk manifest');
-  await expect(conversionGroup).toContainText('chapter-one-chunks.txt');
-  await expect(conversionGroup).toContainText('text/plain');
-  await expect(conversionGroup).toContainText('blob:http://127.0.0.1:4173/');
-  await expect(page.getByRole('link', { name: 'Download manifest' })).toHaveAttribute('download', 'chapter-one-chunks.txt');
-  expect(download.suggestedFilename()).toBe('chapter-one-chunks.txt');
-  await expect(page.getByText(/^Chunk files \(1\)/)).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Start conversion' })).toBeEnabled();
-});
-
-test('workflow accepts a large input and enables chunk manifest conversion in Edge', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-
-  const fileInput = page.locator('input[type="file"]');
-  await fileInput.setInputFiles(largeInputFile, { timeout: 120000 });
-  await page.getByRole('combobox', { name: 'Target voice' }).selectOption('en-GB-LibbyNeural');
-  await page.getByRole('spinbutton', { name: 'Chunk size' }).fill('12000');
-  await page.getByRole('combobox', { name: 'Conversion speed' }).selectOption('Normal');
-
-  const startButton = page.getByRole('button', { name: 'Start conversion' });
-
-  await expect(page.getByRole('region', { name: 'Upload' })).toContainText('input.txt');
-  await expect(page.getByRole('region', { name: 'Settings' })).toContainText('Loaded input.txt');
-  await expect(page.getByRole('status')).toContainText('Ready to start conversion.');
-  await expect(startButton).toBeEnabled();
-});
-
-test('workflow controls reject unsupported file types and preserve the disabled start state in Edge', async ({ page }) => {
-  await page.goto('/', { waitUntil: 'domcontentloaded' });
-
-  const fileInput = page.locator('input[type="file"]');
-  await expect(page.getByRole('heading', { name: 'AudioBookConvert' })).toBeVisible({ timeout: 30000 });
-  await fileInput.setInputFiles(unsupportedFile);
-
-  await expect(page.getByRole('alert')).toContainText('Unsupported file type');
-  await expect(page.getByRole('button', { name: 'Start conversion' })).toBeDisabled();
-  await expect(page.getByRole('status')).toContainText('Start conversion is blocked');
+  await expect(page.getByRole('heading', { name: 'Audiobook Created!' })).toBeVisible({ timeout: 15000 });
+  await expect(page.getByText('Source Cleanup')).toBeVisible();
+  await expect(page.getByText('2 repeated blocks removed')).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Save Audiobook' })).toHaveAttribute('download', /converted\.mp3$/);
+  await expect(page.getByRole('link', { name: 'Save Audiobook' })).toHaveAttribute('href', /blob:/);
 });

@@ -29,7 +29,6 @@ export function App() {
     handleVolumeChange,
     handleTtsThreadsChange,
     handleGapMsChange,
-    handleStreamToDiskChange,
     toggleProcessingOption,
     handleStartConversion,
     handleVoiceChange,
@@ -40,7 +39,6 @@ export function App() {
     volume,
     ttsThreads,
     gapMs,
-    streamToDisk,
     autoPilot,
     performanceTier,
     showAdvanced,
@@ -159,8 +157,6 @@ export function App() {
                     onToggle={toggleProcessingOption}
                     gapMs={gapMs}
                     onGapChange={handleGapMsChange}
-                    streamToDisk={streamToDisk}
-                    onStreamChange={handleStreamToDiskChange}
                   />
                 </div>
               </div>

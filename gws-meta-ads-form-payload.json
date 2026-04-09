@@ -1,0 +1,905 @@
+{
+  "requests": [
+    {
+      "updateFormInfo": {
+        "updateMask": "title,description",
+        "info": {
+          "description": "Please complete this onboarding form so we can launch and manage your Meta ads efficiently.\n\nScope clarification:\n- We run and manage Meta ads end-to-end (strategy, setup, optimization, reporting).\n- We do NOT create video content.\n- We do NOT build or redesign websites.\n\nPlease share existing assets, links, and access details where relevant. More detail = faster launch and better performance.",
+          "title": "Niyalo Meta Ads Client Onboarding (Managed Ads Only)"
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 38
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 37
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 36
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 35
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 34
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 33
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 32
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 31
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 30
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 29
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 28
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 27
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 26
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 25
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 24
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 23
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 22
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 21
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 20
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 19
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 18
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 17
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 16
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 15
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 14
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 13
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 12
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 11
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 10
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 9
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 8
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 7
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 6
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 5
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 4
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 3
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 2
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 1
+        }
+      }
+    },
+    {
+      "deleteItem": {
+        "location": {
+          "index": 0
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "Legal business name"
+        },
+        "location": {
+          "index": 0
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Primary point of contact (name, role, email, phone/WhatsApp)"
+        },
+        "location": {
+          "index": 1
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What exactly are we promoting? (products/services, pricing, main offer, any seasonal promo)"
+        },
+        "location": {
+          "index": 2
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which URL(s) will ads send traffic to? (landing page, booking page, checkout, WhatsApp, etc.)"
+        },
+        "location": {
+          "index": 3
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which geographies and languages are in scope?"
+        },
+        "location": {
+          "index": 4
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Top 3 reasons customers choose you + strongest proof points (results, testimonials, credentials)"
+        },
+        "location": {
+          "index": 5
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "Help us align media strategy and KPI targets from day one.",
+          "pageBreakItem": {},
+          "title": "Campaign Goals and Budget"
+        },
+        "location": {
+          "index": 6
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Primary objective for Meta ads (e.g., leads, booked calls, sales, messages)"
+        },
+        "location": {
+          "index": 7
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "Monthly ad budget and currency"
+        },
+        "location": {
+          "index": 8
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {}
+            }
+          },
+          "title": "Target CPA/CPL/ROAS (if known)"
+        },
+        "location": {
+          "index": 9
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {}
+            }
+          },
+          "title": "Expected monthly lead/sales target (if known)"
+        },
+        "location": {
+          "index": 10
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "Target launch date for campaigns"
+        },
+        "location": {
+          "index": 11
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "The clearer your ICP and objections, the faster we find winning angles.",
+          "pageBreakItem": {},
+          "title": "Audience and Positioning"
+        },
+        "location": {
+          "index": 12
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Describe your ideal customer profile (demographics, pains, motivations, buyer intent signals)"
+        },
+        "location": {
+          "index": 13
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Any audiences we must exclude?"
+        },
+        "location": {
+          "index": 14
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Do you have customer data sources for lookalikes? (past buyers/leads/email list, website visitors)"
+        },
+        "location": {
+          "index": 15
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "If you ran ads before: what worked, what failed, and what should we avoid repeating?"
+        },
+        "location": {
+          "index": 16
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "Important: your team provides creative assets and website pages. We do not produce videos or build websites in this service scope.",
+          "pageBreakItem": {},
+          "title": "Creative and Brand Inputs"
+        },
+        "location": {
+          "index": 17
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Share links to brand assets (logo files, color codes, fonts, brand guide)"
+        },
+        "location": {
+          "index": 18
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Share existing ad creatives available now (images/videos) + folder links"
+        },
+        "location": {
+          "index": 19
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "If video creatives are not ready yet, when will your team provide them?"
+        },
+        "location": {
+          "index": 20
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Approved claims/USPs to emphasize and prohibited claims/phrases to avoid"
+        },
+        "location": {
+          "index": 21
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Ad examples you like (competitors or other brands) and why"
+        },
+        "location": {
+          "index": 22
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "We need these details to set up, verify, and optimize campaigns accurately.",
+          "pageBreakItem": {},
+          "title": "Meta Account Access and Tracking"
+        },
+        "location": {
+          "index": 23
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Meta Business Manager ID + Ad Account ID + account owner email"
+        },
+        "location": {
+          "index": 24
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Facebook Page URL + Instagram handle to use for ads"
+        },
+        "location": {
+          "index": 25
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Pixel/CAPI status and who can make website tracking changes"
+        },
+        "location": {
+          "index": 26
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Where should leads go? (CRM, spreadsheet, email, WhatsApp) + routing owner"
+        },
+        "location": {
+          "index": 27
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Domain verification status and technical contact for urgent fixes"
+        },
+        "location": {
+          "index": 28
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "Final operational details for approvals, reporting, and commercial setup.",
+          "pageBreakItem": {},
+          "title": "Workflow, Compliance, and Billing"
+        },
+        "location": {
+          "index": 29
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Who approves ad copy/creative and typical approval turnaround time?"
+        },
+        "location": {
+          "index": 30
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Preferred reporting cadence and your definition of success for first 60 days"
+        },
+        "location": {
+          "index": 31
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Any legal/compliance constraints (regulated claims, disclaimers, restricted topics)?"
+        },
+        "location": {
+          "index": 32
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Billing legal entity name + billing email"
+        },
+        "location": {
+          "index": 33
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Billing address + VAT/GST/tax ID (if applicable)"
+        },
+        "location": {
+          "index": 34
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "Name and title of the person who signs the agreement"
+        },
+        "location": {
+          "index": 35
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Anything else we should know before launch?"
+        },
+        "location": {
+          "index": 36
+        }
+      }
+    }
+  ],
+  "writeControl": {
+    "requiredRevisionId": "00000025"
+  },
+  "includeFormInResponse": true
+}

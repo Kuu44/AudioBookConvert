@@ -70,7 +70,6 @@ export function useWorkflowState() {
   const [dictionaryMode, setDictionaryMode] = useState(true);
   const [ttsThreads, setTtsThreads] = useState(24);
   const [gapMs, setGapMs] = useState(0);
-  const [streamToDisk, setStreamToDisk] = useState(false);
   const [autoPilot, setAutoPilot] = useState(true);
   const [performanceTier, setPerformanceTier] = useState<'turbo' | 'standard' | 'stability'>('standard');
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -158,7 +157,6 @@ export function useWorkflowState() {
   const handleVolumeChange = (v: string) => setVolume(v);
   const handleTtsThreadsChange = (v: number) => setTtsThreads(v);
   const handleGapMsChange = (v: number) => setGapMs(v);
-  const handleStreamToDiskChange = (v: boolean) => setStreamToDisk(v);
   const handleDictionaryModeChange = (v: boolean) => setDictionaryMode(v);
   const handleAutoPilotChange = (v: boolean) => setAutoPilot(v);
   const handlePerformanceTierChange = (v: 'turbo' | 'standard' | 'stability') => setPerformanceTier(v);
@@ -258,12 +256,12 @@ export function useWorkflowState() {
     conversionError: conversion.error, conversionPhase: conversion.phase,
     dictionaryMode, fileError, handleChunkSizeChange, handleDictionaryModeChange,
     handleFileSelection, handleSpeedChange, handlePitchChange, handleVolumeChange,
-    handleTtsThreadsChange, handleGapMsChange, handleStreamToDiskChange,
+    handleTtsThreadsChange, handleGapMsChange,
     handleAutoPilotChange, handlePerformanceTierChange, handleShowAdvancedChange,
     handleClearPersistence,
     toggleProcessingOption, handleStartConversion, handleVoiceChange,
     selectedFile, selectedSourceFile, selectedVoice, settingsError, speed, pitch, volume,
-    ttsThreads, gapMs, streamToDisk, processingOptions, voices,
+    ttsThreads, gapMs, processingOptions, voices,
     autoPilot, performanceTier, showAdvanced,
     sessionProgress, showResumePrompt, 
     textInput, setTextInput,
