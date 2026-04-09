@@ -1,0 +1,296 @@
+{
+  "requests": [
+    {
+      "createItem": {
+        "item": {
+          "description": "These added questions help us sharpen targeting and campaign strategy. We still do managed Meta ads only (no website build, no video production).",
+          "pageBreakItem": {},
+          "title": "Additional Inputs: Audience, Product, and Campaign Background"
+        },
+        "location": {
+          "index": 37
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "pageBreakItem": {},
+          "title": "Target Audience"
+        },
+        "location": {
+          "index": 38
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "Example: health-conscious adults 25-45, gym enthusiasts, busy professionals, or moms focused on family wellness.",
+          "title": "Who is your primary audience for Meta ads and your destination page experience?",
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          }
+        },
+        "location": {
+          "index": 39
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Do you target different audience segments (e.g., men vs women, athletes vs lifestyle users)? If yes, please describe."
+        },
+        "location": {
+          "index": 40
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "choiceQuestion": {
+                "options": [
+                  {
+                    "value": "Website"
+                  },
+                  {
+                    "value": "WhatsApp"
+                  },
+                  {
+                    "value": "Messenger"
+                  },
+                  {
+                    "value": "Phone call"
+                  },
+                  {
+                    "value": "Direct checkout"
+                  }
+                ],
+                "type": "CHECKBOX"
+              },
+              "required": true
+            }
+          },
+          "title": "Where should users convert or contact you after seeing the ad? (Select all that apply)"
+        },
+        "location": {
+          "index": 41
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Are there any competitor or non-competitor brands/websites you admire? Please list names and URLs."
+        },
+        "location": {
+          "index": 42
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "pageBreakItem": {},
+          "title": "Product Information"
+        },
+        "location": {
+          "index": 43
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Please share a list of your current products/service lines (including variants like flavors, sizes, plans, or packages)."
+        },
+        "location": {
+          "index": 44
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "Which product(s) or service(s) should we highlight first in Meta ads?"
+        },
+        "location": {
+          "index": 45
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "Your team provides these assets. We use and optimize them in ads, but we do not produce videos in this service scope.",
+          "title": "Do you have product photos, lifestyle images, or videos available for ads? Please upload links.",
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          }
+        },
+        "location": {
+          "index": 46
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "pageBreakItem": {},
+          "title": "Unique Selling Points (USPs)"
+        },
+        "location": {
+          "index": 47
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "description": "Examples: clinically tested, vegan, sustainable sourcing, doctor-formulated, transparent ingredients, fast shipping, premium support.",
+          "title": "What makes your brand stand out from competitors?",
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          }
+        },
+        "location": {
+          "index": 48
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What benefits or claims do you want emphasized in ads?"
+        },
+        "location": {
+          "index": 49
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "pageBreakItem": {},
+          "title": "Campaign Background (Additional)"
+        },
+        "location": {
+          "index": 50
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {}
+            }
+          },
+          "title": "What is your monthly ad budget range (AUD)?"
+        },
+        "location": {
+          "index": 51
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What are your short-term goals? (e.g., awareness, leads, sales)"
+        },
+        "location": {
+          "index": 52
+        }
+      }
+    },
+    {
+      "createItem": {
+        "item": {
+          "questionItem": {
+            "question": {
+              "required": true,
+              "textQuestion": {
+                "paragraph": true
+              }
+            }
+          },
+          "title": "What are your long-term objectives? (e.g., launch new line, expand to new markets)"
+        },
+        "location": {
+          "index": 53
+        }
+      }
+    }
+  ],
+  "writeControl": {
+    "requiredRevisionId": "0000002c"
+  },
+  "includeFormInResponse": true
+}
